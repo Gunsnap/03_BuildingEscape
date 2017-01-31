@@ -23,4 +23,6 @@ public:
 private:
 	// Distance in cm the player can reach
 	const float Reach = 100.0f;
+	
+	UPhysicsHandleComponent* PhysicsHandle = nullptr;
 };
