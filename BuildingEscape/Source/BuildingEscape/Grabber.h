@@ -19,4 +19,8 @@ public:
 	
 	// Called every frame
 	virtual void TickComponent( float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction ) override;
+	
+private:
+	// Distance in cm the player can reach
+	const float Reach = 100.0f;
 };
