@@ -22,8 +22,6 @@ UGrabber::UGrabber()
 void UGrabber::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	UE_LOG(LogTemp, Warning, TEXT("Grabber reporting for duty!"));
 }
 
 
@@ -48,7 +46,7 @@ void UGrabber::TickComponent( float DeltaTime, ELevelTick TickType, FActorCompon
 	FVector LineTraceEnd = PlayerViewPointLocation
 	+ PlayerViewPointRotation.Vector() * Reach;
 	
-	// Draw a red trace in world to visualice
+	/// Draw a red trace in world to visualice
 	DrawDebugLine(GetWorld(),
 				  PlayerViewPointLocation,
 				  LineTraceEnd,
@@ -58,8 +56,22 @@ void UGrabber::TickComponent( float DeltaTime, ELevelTick TickType, FActorCompon
 				  10.f
 				  );
 	
-	// Ray-cast out to reach distance
+	/// Setup query parameters
+	FCollisionQueryParams TraceParameters(FName(TEXT("")), false, GetOwner() );
 	
-	// See what we hit
+	/// Line-trace (Ray-cast) out to reach distance
+	FHitResult Hit;
+	GetWorld()->LineTraceSingleByObjectType(
+											OUT Hit,
+											PlayerViewPointLocation,
+											LineTraceEnd,
+											FCollisionObjectQueryParams( ECollisionChannel::ECC_PhysicsBody ),
+											TraceParameters
+											);
+	
+	/// See what we hit
+	AActor* ActorHit = Hit.GetActor();
+	if(ActorHit != nil)
+		UE_LOG(LogTemp, Warning, TEXT("Tracer hit: %s"), *ActorHit->GetName() );
 }
 
