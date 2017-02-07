@@ -375,3 +375,5 @@ __pycache__/
 #####################################################
 BuildingEscape/Intermediate/
 BuildingEscape/Saved/
+BuildingEscape/Binaries/
+BuildingEscape/Content/StarterContent/
