@@ -373,3 +373,5 @@ __pycache__/
 #####################################################
 # Mit eget
 #####################################################
+BuildingEscape/Intermediate/
+BuildingEscape/Saved/
