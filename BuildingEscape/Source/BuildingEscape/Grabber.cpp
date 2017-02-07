@@ -65,7 +65,7 @@ const FHitResult UGrabber::GetFirstPhysicsBodyInReach(){
 	
 	/// See what we hit
 	AActor* ActorHit = Hit.GetActor();
-	if(ActorHit != nil)
+	if(ActorHit !=nullptr) /// nil skiftet til nullptr
 		UE_LOG(LogTemp, Warning, TEXT("Tracer hit: %s"), *ActorHit->GetName() );
 	
 	return FHitResult();
