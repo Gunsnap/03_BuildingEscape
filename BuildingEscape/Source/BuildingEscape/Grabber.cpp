@@ -3,14 +3,14 @@
 #include "BuildingEscape.h"
 #include "Grabber.h"
 
-#define OUT // This is a Macro that does noting,
-			// but highlights the word OUT in the editor
+// This is a Macro that does noting, but highlights the word OUT in the editor
+#define OUT
 
 
 // Sets default values for this component's properties
 UGrabber::UGrabber(){
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
+	/// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
+	/// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 }
 
@@ -41,14 +41,12 @@ void UGrabber::SetupInputComponent(){
 }
 
 const FHitResult UGrabber::GetFirstPhysicsBodyInReach(){
-	// Get player view point
+	/// Get player view point
 	FVector PlayerViewPointLocation;
 	FRotator PlayerViewPointRotation;
-	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(
-															   OUT PlayerViewPointLocation, OUT PlayerViewPointRotation);
+	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint( OUT PlayerViewPointLocation, OUT PlayerViewPointRotation);
 	
-	FVector LineTraceEnd = PlayerViewPointLocation
-	+ PlayerViewPointRotation.Vector() * Reach;
+	FVector LineTraceEnd = PlayerViewPointLocation + PlayerViewPointRotation.Vector() * Reach;
 	
 	/// Setup query parameters
 	FCollisionQueryParams TraceParameters(FName(TEXT("")), false, GetOwner() );
@@ -65,26 +63,33 @@ const FHitResult UGrabber::GetFirstPhysicsBodyInReach(){
 	
 	/// See what we hit
 	AActor* ActorHit = Hit.GetActor();
-	if(ActorHit !=nullptr) /// nil skiftet til nullptr
+	if(ActorHit !=nullptr) /// nil skiftet til nullptr, kan måske slette "!= nullptr"
 		UE_LOG(LogTemp, Warning, TEXT("Tracer hit: %s"), *ActorHit->GetName() );
 	
-	return FHitResult();
+	return Hit;
 }
 
-void UGrabber::Grab(){
-	UE_LOG(LogTemp, Warning, TEXT("Grab pressed") );
-	
+void UGrabber::Grab() {
+	UE_LOG( LogTemp, Warning, TEXT( "Grab pressed" ) );
+
 	/// Line-trace (ray-cast) and  reach any actors with physicsHandle
-	GetFirstPhysicsBodyInReach();
-	
-	/// if hit then attach a PhysicsHandle
-		/// TODO attach physics handle
+	auto HitResult = GetFirstPhysicsBodyInReach();
+	auto ComponentToGrab = HitResult.GetComponent();
+	auto ActorHit = HitResult.GetActor();
+
+	if ( ActorHit ) {
+		PhysicsHandle->GrabComponentAtLocationWithRotation(
+			ComponentToGrab,
+			NAME_None,
+			ComponentToGrab->GetOwner()->GetActorLocation(),
+			ComponentToGrab->GetOwner()->GetActorRotation()
+		);
+	}
 }
 
 void UGrabber::Release(){
 	UE_LOG(LogTemp, Warning, TEXT("Grab released") );
-	
-	/// TODO release physics handle
+	PhysicsHandle->ReleaseComponent();
 }
 
 
@@ -92,7 +97,15 @@ void UGrabber::Release(){
 void UGrabber::TickComponent( float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction ){
 	Super::TickComponent( DeltaTime, TickType, ThisTickFunction );
 	
-	/// if physics handle is attached
-		/// move the object we're holding
+	/// Get player view point
+	FVector PlayerViewPointLocation;
+	FRotator PlayerViewPointRotation;
+	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint( OUT PlayerViewPointLocation, OUT PlayerViewPointRotation );
+
+	FVector LineTraceEnd = PlayerViewPointLocation+PlayerViewPointRotation.Vector() * Reach;
+
+	if ( PhysicsHandle->GrabbedComponent ) {
+		PhysicsHandle->SetTargetLocation( LineTraceEnd );
+	}
 }
 
