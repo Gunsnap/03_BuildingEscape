@@ -376,4 +376,5 @@ __pycache__/
 BuildingEscape/Intermediate/
 BuildingEscape/Saved/
 BuildingEscape/Binaries/
-BuildingEscape/Content/StarterContent/
+BuildingEscape/Content/StarterContent/Textures
+BuildingEscape/Content/StarterContent/HDRI
