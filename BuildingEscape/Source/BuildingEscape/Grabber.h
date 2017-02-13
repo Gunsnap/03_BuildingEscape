@@ -36,7 +36,13 @@ private:
 	// Return hit for first physics body in reach
 	const FHitResult GetFirstPhysicsBodyInReach();
 	
-	/// Ray-cast and grab what's in reach
+	// Ray-cast and grab what's in reach
 	void Grab();
 	void Release();
+
+	// Returns current start of reach line
+	FVector GetReachLineStart();
+
+	// Returns current end of reach line
+	FVector GetReachLineEnd();
 };
