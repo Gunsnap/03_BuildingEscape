@@ -20,6 +20,7 @@ public:
 private:
 	void OpenDoor();
 	void CloseDoor();
+	float GetTotalMassOffActorsOnPlate();
 	
 	UPROPERTY(VisibleAnywhere)
 	float OpenAngle = -90.0f;
@@ -32,6 +33,5 @@ private:
 	
 	float LastDoorOpenTime;
 	
-	AActor* ActorThatOpens;
 	AActor* Owner;
 };
