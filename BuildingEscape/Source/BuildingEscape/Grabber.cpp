@@ -6,7 +6,6 @@
 // This is a Macro that does noting, but highlights the word OUT in the editor
 #define OUT
 
-
 // Sets default values for this component's properties
 UGrabber::UGrabber(){
 	/// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
@@ -32,7 +31,8 @@ void UGrabber::SetupInputComponent(){
 	InputComponent = GetOwner()->FindComponentByClass<UInputComponent>();
 	if(InputComponent){
 		UE_LOG(LogTemp, Warning, TEXT("InputComponent detected on %s"), *GetOwner()->GetName() );
-		/// Bind the input action
+
+		/// Bind the input actions
 		InputComponent->BindAction("Grab", IE_Pressed, this, &UGrabber::Grab);
 		InputComponent->BindAction("Grab", IE_Released, this, &UGrabber::Release);
 	}else{
