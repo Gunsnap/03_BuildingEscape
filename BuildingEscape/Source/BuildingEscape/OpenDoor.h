@@ -1,7 +1,7 @@
 
 #include "OpenDoor.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE( FOnOpenRequest );
+DECLARE_DYNAMIC_MULTICAST_DELEGATE( FDoorEvent );
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BUILDINGESCAPE_API UOpenDoor : public UActorComponent
@@ -19,25 +19,20 @@ public:
 	virtual void TickComponent( float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction ) override;
 
 	UPROPERTY( BlueprintAssignable )
-		FOnOpenRequest OnOpenRequest;
+		FDoorEvent OnOpen;
+
+	UPROPERTY( BlueprintAssignable )
+		FDoorEvent OnClose;
 	
 private:
-	void OpenDoor();
-	void CloseDoor();
-
-	// Returns mass in kg
+	// Find all overlapping actors and return the total kg
 	float GetTotalMassOffActorsOnPlate();
 	
-	UPROPERTY(VisibleAnywhere)
-	float OpenAngle = -90.0f;
-	
-	UPROPERTY(VisibleAnywhere)
-	float DoorCloseDelay = 0.25f;
-	
-	UPROPERTY(EditAnywhere)
-	ATriggerVolume* PressurePlate = nullptr;
-	
-	float LastDoorOpenTime;
-	
+	UPROPERTY( EditAnywhere )
+		ATriggerVolume* PressurePlate = nullptr;
+
+	UPROPERTY( EditAnywhere )
+		float TriggerMass = 30.f;
+
 	AActor* Owner = nullptr;
 };
