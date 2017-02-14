@@ -61,6 +61,7 @@ void UGrabber::Grab() {
 	auto ActorHit = HitResult.GetActor();
 
 	if( ActorHit ) {
+		if( !PhysicsHandle ) return;
 		PhysicsHandle->GrabComponentAtLocationWithRotation(
 			ComponentToGrab,
 			NAME_None, /// no bones needed
@@ -70,12 +71,16 @@ void UGrabber::Grab() {
 	}
 }
 
-void UGrabber::Release() { PhysicsHandle->ReleaseComponent(); }
+void UGrabber::Release() {
+	if( !PhysicsHandle ) return;
+	PhysicsHandle->ReleaseComponent();
+}
 
 // Called every frame
 void UGrabber::TickComponent( float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction ) {
 	Super::TickComponent( DeltaTime, TickType, ThisTickFunction );
 
+	if( !PhysicsHandle ) return;
 	if( PhysicsHandle->GrabbedComponent ) {
 		PhysicsHandle->SetTargetLocation( GetReachLineEnd() );
 	}

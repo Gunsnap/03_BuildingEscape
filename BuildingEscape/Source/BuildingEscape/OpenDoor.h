@@ -20,6 +20,8 @@ public:
 private:
 	void OpenDoor();
 	void CloseDoor();
+
+	// Returns mass in kg
 	float GetTotalMassOffActorsOnPlate();
 	
 	UPROPERTY(VisibleAnywhere)
@@ -29,9 +31,9 @@ private:
 	float DoorCloseDelay = 0.25f;
 	
 	UPROPERTY(EditAnywhere)
-	ATriggerVolume* PressurePlate;
+	ATriggerVolume* PressurePlate = nullptr;
 	
 	float LastDoorOpenTime;
 	
-	AActor* Owner;
+	AActor* Owner = nullptr;
 };
